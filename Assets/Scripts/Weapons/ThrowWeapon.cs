@@ -32,8 +32,11 @@ public class ThrowWeapon : MonoBehaviour, IWeapon
             return;
         }
 
+        // Park the reserve under a runtime container so pooled instances are never
+        // serialized into the scene (they belong to play mode only).
+        var container = new GameObject($"{name}_Pool");
         var factory = new ProjectileFactory(projectilePrefab, projectileSpeed, projectileLifetime, projectileSize);
-        _pool = new ProjectilePool(factory, poolSize, transform);
+        _pool = new ProjectilePool(factory, poolSize, container.transform);
     }
 
     public void Attack(Vector2 direction)
