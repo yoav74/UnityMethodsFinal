@@ -7,8 +7,8 @@ using UnityEngine;
 /// steps through the protected hooks. Subclasses never override <see cref="Fire"/>, so a new
 /// projectile is added by extension, not by changing this class (Open/Closed).
 ///
-/// <see cref="Despawn"/> removes it from play; it destroys by default and is made
-/// pool-aware in the Object Pool ticket (ME-40).
+/// A projectile can belong to an <see cref="IProjectilePool"/>: when spent it returns itself
+/// via <see cref="Despawn"/>, or destroys itself if it has no pool.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
 public abstract class BaseProjectile : MonoBehaviour
@@ -17,10 +17,17 @@ public abstract class BaseProjectile : MonoBehaviour
     [SerializeField] protected float lifetime = 3f;
 
     protected Rigidbody2D body;
+    private IProjectilePool _pool;
 
     protected virtual void Awake()
     {
         body = GetComponent<Rigidbody2D>();
+    }
+
+    /// <summary>Assigns the pool this projectile returns to when spent (set by the pool).</summary>
+    public void SetPool(IProjectilePool pool)
+    {
+        _pool = pool;
     }
 
     /// <summary>
@@ -38,26 +45,27 @@ public abstract class BaseProjectile : MonoBehaviour
 
     public void Fire() => Fire(Vector2.right);
 
-    /// <summary>Set motion params in code (used by the builder, ME-38).</summary>
+    /// <summary>Set motion params in code (used by the builder).</summary>
     public void Configure(float projectileSpeed, float projectileLifetime)
     {
         speed = projectileSpeed;
         lifetime = projectileLifetime;
     }
 
-    /// <summary>Remove the projectile from play. Base: destroy (pool-aware in ME-40).</summary>
-    public virtual void Despawn()
+    /// <summary>Remove from play: return to the pool if pooled, otherwise destroy.</summary>
+    public void Despawn()
     {
         CancelInvoke(nameof(Despawn));
-        Destroy(gameObject);
+        if (_pool != null)
+            _pool.Return(this);
+        else
+            Destroy(gameObject);
     }
 
     // ---- hooks the subclasses fill in ----
 
-    /// <summary>Map the requested aim to the actual travel direction. Default: as-is.</summary>
     protected virtual Vector2 ResolveDirection(Vector2 aim) => aim;
 
-    /// <summary>Reset state just before launch. Default: clear velocity + any pending despawn.</summary>
     protected virtual void Prepare(Vector2 direction)
     {
         CancelInvoke(nameof(Despawn));
@@ -65,20 +73,17 @@ public abstract class BaseProjectile : MonoBehaviour
             body.linearVelocity = Vector2.zero;
     }
 
-    /// <summary>Apply motion. Default: constant velocity along direction at <see cref="speed"/>.</summary>
     protected virtual void Launch(Vector2 direction)
     {
         if (body != null)
             body.linearVelocity = direction.normalized * speed;
     }
 
-    /// <summary>Schedule the despawn after <see cref="lifetime"/> seconds (≤0 = never).</summary>
     protected virtual void ScheduleDespawn()
     {
         if (lifetime > 0f)
             Invoke(nameof(Despawn), lifetime);
     }
 
-    /// <summary>Post-fire hook (spin, logging, etc.). Default: nothing.</summary>
     protected virtual void OnFired(Vector2 direction) { }
 }
