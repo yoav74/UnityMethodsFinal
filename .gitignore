@@ -59,3 +59,6 @@ crashlytics-build.properties
 # Project-specific: keep the extracted sprites, not the zip
 /Assets/Ready_Sprites.zip
 /Assets/Ready_Sprites.zip.meta
+
+# Claude Code local tooling (skills, settings) - not part of the game
+.claude/
