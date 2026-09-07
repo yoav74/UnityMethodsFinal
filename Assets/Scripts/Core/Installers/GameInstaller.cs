@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Zenject;
 
 /// <summary>
@@ -13,10 +14,15 @@ using Zenject;
 public class GameInstaller : MonoInstaller
 {
     [SerializeField] private GameConfig gameConfig;
+    [SerializeField] private InputActionAsset inputActions;
 
     public override void InstallBindings()
     {
         // Shared, read-only tuning data for the whole scene.
         Container.BindInstance(gameConfig).AsSingle();
+
+        // Input: bound by its interfaces so consumers see IInputService, while Zenject also
+        // drives its IInitializable/IDisposable lifecycle (enable/disable the action map).
+        Container.BindInterfacesTo<InputService>().AsSingle().WithArguments(inputActions);
     }
 }
