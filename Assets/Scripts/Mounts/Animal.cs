@@ -27,17 +27,29 @@ public class Animal : MonoBehaviour, IMount
         HitInFront(direction);
     }
 
-    /// <summary>The shared melee reach used by tail/spin animals: enemies + rocks in front.</summary>
+    /// <summary>The shared melee reach in the facing direction (a tail swipe).</summary>
     protected void HitInFront(Vector2 direction)
     {
         Vector2 dir = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
         Vector2 center = (Vector2)transform.position + dir * (attackReach * 0.5f);
+        HitCircle(center, attackReach * 0.5f);
+    }
 
-        Physics2D.OverlapCircle(center, attackReach * 0.5f, TriggerFilter, _hits);
+    /// <summary>A hit in a full circle around the animal (a spin attack).</summary>
+    protected void HitAround(float radius)
+    {
+        HitCircle(transform.position, radius);
+    }
+
+    // The shared rules applied to everything overlapping a circle: damage enemies (ghost immune),
+    // shatter rocks — never bonfires.
+    private void HitCircle(Vector2 center, float radius)
+    {
+        Physics2D.OverlapCircle(center, radius, TriggerFilter, _hits);
         foreach (var hit in _hits)
         {
-            hit.GetComponent<IDamageable>()?.TakeDamage(1); // enemies (ghost immune)
-            hit.GetComponent<IDestructible>()?.Hit();        // rocks (not bonfires)
+            hit.GetComponent<IDamageable>()?.TakeDamage(1);
+            hit.GetComponent<IDestructible>()?.Hit();
         }
     }
 }
