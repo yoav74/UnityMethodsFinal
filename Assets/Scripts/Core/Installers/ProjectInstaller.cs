@@ -27,6 +27,7 @@ public class ProjectInstaller : MonoInstaller
 
         // Lives (MVC), persistent across levels.
         Container.Bind<LivesModel>().AsSingle();
+        Container.Bind<FruitCounter>().AsSingle();
         Container.BindInterfacesTo<LivesController>().AsSingle();
 
         // Level flow + death, shared by the whole game.
