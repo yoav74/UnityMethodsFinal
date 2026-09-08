@@ -62,6 +62,7 @@ public class BoomerangProjectile : BaseProjectile
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        other.GetComponent<IDestructible>()?.Hit();
+        other.GetComponent<IDestructible>()?.Hit();       // rocks
+        other.GetComponent<IDamageable>()?.TakeDamage(1);  // enemies
     }
 }
