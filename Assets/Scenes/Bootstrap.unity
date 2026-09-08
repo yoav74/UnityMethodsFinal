@@ -730,6 +730,63 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PowerView
   label: {fileID: 0}
+--- !u!1001 &1296940403
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 256327248483463420, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4663421459362699102, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+      propertyPath: m_Name
+      value: Rock
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
 --- !u!1 &1974885569
 GameObject:
   m_ObjectHideFlags: 0
@@ -922,3 +979,4 @@ SceneRoots:
   - {fileID: 5289338685709901826}
   - {fileID: 758415388}
   - {fileID: 467676152}
+  - {fileID: 1296940403}
