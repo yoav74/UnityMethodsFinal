@@ -28,5 +28,9 @@ public class GameInstaller : MonoInstaller
         // Lives (MVC): model + controller live in the container; the view is a scene object.
         Container.Bind<LivesModel>().AsSingle();
         Container.BindInterfacesTo<LivesController>().AsSingle();
+
+        // Power meter (Async & Tasks): model + the async drain controller.
+        Container.Bind<PowerModel>().AsSingle();
+        Container.BindInterfacesTo<PowerController>().AsSingle();
     }
 }
