@@ -24,5 +24,9 @@ public class GameInstaller : MonoInstaller
         // Input: bound by its interfaces so consumers see IInputService, while Zenject also
         // drives its IInitializable/IDisposable lifecycle (enable/disable the action map).
         Container.BindInterfacesTo<InputService>().AsSingle().WithArguments(inputActions);
+
+        // Lives (MVC): model + controller live in the container; the view is a scene object.
+        Container.Bind<LivesModel>().AsSingle();
+        Container.BindInterfacesTo<LivesController>().AsSingle();
     }
 }
