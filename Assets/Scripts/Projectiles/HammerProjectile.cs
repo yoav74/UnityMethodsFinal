@@ -40,4 +40,10 @@ public class HammerProjectile : BaseProjectile
         if (thrown)
             transform.Rotate(0f, 0f, spinDirection * spinSpeed * Time.deltaTime);
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // The hammer kills enemies but cannot break rocks (only the boomerang can).
+        other.GetComponent<IDamageable>()?.TakeDamage(1);
+    }
 }
