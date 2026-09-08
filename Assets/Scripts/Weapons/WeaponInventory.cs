@@ -15,13 +15,20 @@ public class WeaponInventory : MonoBehaviour
 
     public bool HasWeapon => Current != null;
 
+    /// <summary>Raised when the active weapon changes (equip on pickup, or SelectNext).</summary>
+    public event System.Action<IWeapon> CurrentChanged;
+
     public void Add(IWeapon weapon)
     {
         if (weapon == null || _weapons.Contains(weapon))
             return;
 
         _weapons.Add(weapon);
-        Current ??= weapon; // auto-equip the first weapon collected
+        if (Current == null) // auto-equip the first weapon collected
+        {
+            Current = weapon;
+            CurrentChanged?.Invoke(Current);
+        }
     }
 
     /// <summary>Cycle to the next collected weapon (if the player carries more than one).</summary>
@@ -32,5 +39,6 @@ public class WeaponInventory : MonoBehaviour
 
         int index = _weapons.IndexOf(Current);
         Current = _weapons[(index + 1) % _weapons.Count];
+        CurrentChanged?.Invoke(Current);
     }
 }
