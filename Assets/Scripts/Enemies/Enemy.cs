@@ -33,6 +33,12 @@ public class Enemy : MonoBehaviour, IDamageable
         Health = maxHealth;
     }
 
+    // Also reset on every (re)activation, so a respawned enemy comes back at full health.
+    protected virtual void OnEnable()
+    {
+        Health = maxHealth;
+    }
+
     public virtual void TakeDamage(int amount)
     {
         if (Health <= 0)
@@ -49,10 +55,14 @@ public class Enemy : MonoBehaviour, IDamageable
         OnDeath();
     }
 
-    /// <summary>How the enemy leaves play once dead. Default removes it; subclasses may override.</summary>
+    /// <summary>
+    /// How the enemy leaves play once dead: it deactivates rather than destroys, so a respawn
+    /// handler (<see cref="RespawnOnDeath"/>, ME-56) can bring the very same instance back at its
+    /// spot. Enemies with no respawn simply stay gone. Subclasses may override.
+    /// </summary>
     protected virtual void OnDeath()
     {
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
