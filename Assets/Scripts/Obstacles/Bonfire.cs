@@ -1,25 +1,21 @@
 using UnityEngine;
-using Zenject;
 
 /// <summary>
-/// A bonfire: touching it is <b>instant death</b> — it routes to the single
-/// <see cref="IDeathService"/> so it stays ignorant of lives, respawn and level flow. Per the
-/// brief a bonfire is destroyable only by the fairy, and hitting one while mounted sacrifices
-/// the mount instead of killing the player; those paths arrive with the fairy (ME-64) and
-/// mounts (ME-45).
+/// A bonfire: touching it kills the player — it routes through the player's <see cref="IKillable"/>
+/// so the fairy's invincibility can spare them (and, while invincible, the fairy aura destroys the
+/// bonfire instead). It is <see cref="IDestructible"/> so the fairy can remove it; the mounted
+/// "sacrifice the mount" path arrives with mounts (ME-45).
 /// </summary>
-public class Bonfire : Hazard
+public class Bonfire : Hazard, IDestructible
 {
-    private IDeathService _death;
-
-    [Inject]
-    public void Construct(IDeathService death)
-    {
-        _death = death;
-    }
-
     protected override void OnPlayerHit(GameObject player)
     {
-        _death?.Die();
+        player.GetComponent<IKillable>()?.Kill();
+    }
+
+    /// <summary>Destroyed by the fairy.</summary>
+    public void Hit()
+    {
+        Destroy(gameObject);
     }
 }

@@ -19,6 +19,10 @@ public class GameConfig : ScriptableObject
     [Tooltip("Power lost when the player walks into a rock.")]
     [SerializeField] private int rockPowerCost = 3;
 
+    [Header("Fairy")]
+    [Tooltip("Seconds of invincibility the fairy grants (brief: 10).")]
+    [SerializeField] private float fairyInvincibilitySeconds = 10f;
+
     /// <summary>Lives the player starts a run with (brief: 3).</summary>
     public int StartingLives => startingLives;
 
@@ -33,4 +37,7 @@ public class GameConfig : ScriptableObject
 
     /// <summary>Power lost on hitting a rock (brief: 3).</summary>
     public int RockPowerCost => rockPowerCost;
+
+    /// <summary>Seconds of fairy invincibility (brief: 10).</summary>
+    public float FairyInvincibilitySeconds => fairyInvincibilitySeconds;
 }
