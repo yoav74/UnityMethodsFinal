@@ -3,16 +3,20 @@ using Zenject;
 
 /// <summary>
 /// <b>Controller</b> for lives: reacts to model events and drives the game-level response.
-/// On game over it resets the lives to start (full level/scene flow arrives with ME-66).
-/// Built by the container as an <see cref="IInitializable"/>, so it needs no scene object.
+/// It owns the <c>GameOver</c> path — reset the lives to full and restart from the first level.
+/// The non-fatal path (a life lost while lives remain) is owned by <see cref="DeathService"/>,
+/// so exactly one of them acts per death. Built by the container as an <see cref="IInitializable"/>,
+/// so it needs no scene object and lives at project scope alongside the model.
 /// </summary>
 public class LivesController : IInitializable, System.IDisposable
 {
     private readonly LivesModel _model;
+    private readonly ILevelLoader _levels;
 
-    public LivesController(LivesModel model)
+    public LivesController(LivesModel model, ILevelLoader levels)
     {
         _model = model;
+        _levels = levels;
     }
 
     public void Initialize()
@@ -27,8 +31,8 @@ public class LivesController : IInitializable, System.IDisposable
 
     private void OnGameOver()
     {
-        Debug.Log("Game over - resetting lives to start.");
+        Debug.Log("Game over - resetting to the first level.");
         _model.ResetToStart();
-        // TODO (ME-66): reload the first level here.
+        _levels.LoadFirst();
     }
 }
