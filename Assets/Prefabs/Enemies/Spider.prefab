@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6083802282657901134}
   - component: {fileID: 5321520591863885592}
   - component: {fileID: 1975074477237046594}
+  - component: {fileID: 2114764371726382602}
   m_Layer: 0
   m_Name: Spider
   m_TagString: Untagged
@@ -189,3 +190,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RespawnOnDeath
   respawnSeconds: 3
+--- !u!114 &2114764371726382602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2304129592591348551}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ad335499782e478e82b7762bd3c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DropOnDeath
+  dropPrefab: {fileID: 5405432420798526593, guid: 027db92274e2d9c438cc1b17a6a06ed4, type: 3}
+  dropChance: 1
