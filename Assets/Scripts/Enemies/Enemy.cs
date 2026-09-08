@@ -56,6 +56,19 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
     /// <summary>
+    /// Force death regardless of health or damage rules — the fairy's kill path, which destroys
+    /// anything on contact (a ghost included, even though it shrugs off <see cref="TakeDamage"/>).
+    /// </summary>
+    public void Kill()
+    {
+        if (Health <= 0)
+            return;
+
+        Health = 0;
+        Die();
+    }
+
+    /// <summary>
     /// How the enemy leaves play once dead: it deactivates rather than destroys, so a respawn
     /// handler (<see cref="RespawnOnDeath"/>, ME-56) can bring the very same instance back at its
     /// spot. Enemies with no respawn simply stay gone. Subclasses may override.
