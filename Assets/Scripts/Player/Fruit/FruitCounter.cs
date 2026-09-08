@@ -18,4 +18,11 @@ public class FruitCounter
         Count++;
         CountChanged?.Invoke(Count);
     }
+
+    /// <summary>Clear the count back to zero (a fresh game, on game over).</summary>
+    public void Reset()
+    {
+        Count = 0;
+        CountChanged?.Invoke(Count);
+    }
 }
