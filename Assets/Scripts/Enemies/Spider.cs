@@ -2,11 +2,11 @@ using UnityEngine;
 
 /// <summary>
 /// Spider enemy: patrols up and down around its start position, or hangs static in the air
-/// (per-instance toggle). It extends <see cref="Enemy"/> for health, the shared death path and
-/// player-contact damage, adding only its movement (Open/Closed). Movement is a sine sweep about
+/// (per-instance toggle). It extends <see cref="DamageableEnemy"/> for health, the shared death path
+/// and player-contact damage, adding only its movement (Open/Closed). Movement is a sine sweep about
 /// the spawn point, so it returns cleanly to origin.
 /// </summary>
-public class Spider : Enemy
+public class Spider : DamageableEnemy
 {
     [SerializeField] private bool moveVertically = true;
     [SerializeField] private float speed = 2f;

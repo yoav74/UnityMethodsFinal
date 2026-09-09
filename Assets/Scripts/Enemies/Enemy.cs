@@ -1,65 +1,48 @@
 using UnityEngine;
 
 /// <summary>
-/// Base for every enemy: owns health, the shared damage/death path, and the "touching the player
-/// hurts them" rule, leaving movement/AI to subclasses (Open/Closed — each specific enemy extends
-/// this). Killable by weapons and mount attacks through <see cref="IDamageable"/>; the ghost
-/// (ME-63) overrides <see cref="TakeDamage"/> to shrug those off. On death it raises
-/// <see cref="Died"/> — the hook the respawn timer (ME-56) and drops (ME-57) attach to — then
-/// removes itself via <see cref="OnDeath"/>.
+/// Base for every enemy — <b>damageable or not</b>. It owns only what all enemies share: the
+/// "touching the player hurts them" rule, the one-shot death guard, the <see cref="Died"/> hook
+/// (respawn timer ME-56, drops ME-57 listen here) and how a dead enemy leaves play. It deliberately
+/// does <b>not</b> know about health or <see cref="IDamageable"/>: enemies that can be damaged add
+/// that through <see cref="DamageableEnemy"/>, while the ghost (ME-63) extends this directly and is
+/// simply not <see cref="IDamageable"/> at all — so weapons and mounts find nothing to damage on it,
+/// with no no-op override needed (Interface Segregation / Liskov).
 ///
-/// Touching the player routes through the player's <see cref="IKillable"/>, so the fairy's
-/// invincibility can spare them without the enemy knowing anything about it.
+/// <see cref="Kill"/> is the single death entry point: the fairy calls it to force a kill (a ghost
+/// included), and <see cref="DamageableEnemy"/> calls it when health runs out. Touching the player
+/// routes through the player's <see cref="IKillable"/>, so the fairy's invincibility can spare them
+/// without the enemy knowing anything about it.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
-public class Enemy : MonoBehaviour, IDamageable
+public abstract class Enemy : MonoBehaviour
 {
-    [SerializeField] protected int maxHealth = 1;
-    [SerializeField] private string playerTag = "Player";
+    [SerializeField] protected string playerTag = "Player";
 
-    protected int Health { get; private set; }
+    private bool _dead;
 
     /// <summary>Raised when this enemy dies (respawn timer / drop-on-death listen here).</summary>
     public event System.Action<Enemy> Died;
 
-    protected virtual void Awake()
-    {
-        Health = maxHealth;
-    }
-
-    // Also reset on every (re)activation, so a respawned enemy comes back at full health.
+    // Reset the death guard on every (re)activation, so a respawned enemy is alive again.
     protected virtual void OnEnable()
     {
-        Health = maxHealth;
-    }
-
-    public virtual void TakeDamage(int amount)
-    {
-        if (Health <= 0)
-            return;
-
-        Health -= amount;
-        if (Health <= 0)
-            Die();
-    }
-
-    protected void Die()
-    {
-        Died?.Invoke(this);
-        OnDeath();
+        _dead = false;
     }
 
     /// <summary>
-    /// Force death regardless of health or damage rules — the fairy's kill path, which destroys
-    /// anything on contact (a ghost included, even though it shrugs off <see cref="TakeDamage"/>).
+    /// The one and only way an enemy dies: the fairy's contact kill and health-depletion both come
+    /// through here. Fires once, raises <see cref="Died"/>, then removes the enemy via
+    /// <see cref="OnDeath"/>.
     /// </summary>
     public void Kill()
     {
-        if (Health <= 0)
+        if (_dead)
             return;
 
-        Health = 0;
-        Die();
+        _dead = true;
+        Died?.Invoke(this);
+        OnDeath();
     }
 
     /// <summary>
