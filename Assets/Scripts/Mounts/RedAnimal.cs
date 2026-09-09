@@ -17,8 +17,9 @@ public class RedAnimal : Animal
 
     private ProjectilePool _pool;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         if (fireProjectilePrefab == null)
         {
             Debug.LogError($"RedAnimal '{name}': no fire projectile prefab assigned.");
@@ -30,7 +31,7 @@ public class RedAnimal : Animal
         _pool = new ProjectilePool(factory, poolSize, container.transform);
     }
 
-    public override void Attack(Vector2 direction)
+    protected override void PerformAttack(Vector2 direction)
     {
         if (_pool == null)
             return;

@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class BlueAnimal : Animal
 {
-    public override void Attack(Vector2 direction)
+    protected override void PerformAttack(Vector2 direction)
     {
         HitInFront(direction);
     }

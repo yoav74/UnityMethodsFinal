@@ -15,7 +15,16 @@ public class PlayerMount : MonoBehaviour
     /// <summary>Raised when the mount changes (mounted, swapped, or dismounted to null).</summary>
     public event Action<IMount> MountChanged;
 
+    [Tooltip("The player's own body sprite, hidden while mounted so only the animal shows. Auto-found if left empty.")]
+    [SerializeField] private SpriteRenderer riderSprite;
+
     private GameObject _currentVisual;
+
+    private void Awake()
+    {
+        if (riderSprite == null)
+            riderSprite = GetComponent<SpriteRenderer>();
+    }
 
     public void Mount(IMount mount)
     {
@@ -26,6 +35,7 @@ public class PlayerMount : MonoBehaviour
 
         Current = mount;
         _currentVisual = visual;
+        SetRiderVisible(false); // while riding you ARE the animal — hide the player body sprite
         MountChanged?.Invoke(Current);
     }
 
@@ -36,6 +46,13 @@ public class PlayerMount : MonoBehaviour
 
         _currentVisual = null;
         Current = null;
+        SetRiderVisible(true); // back on foot — show the player again
         MountChanged?.Invoke(null);
+    }
+
+    private void SetRiderVisible(bool visible)
+    {
+        if (riderSprite != null)
+            riderSprite.enabled = visible;
     }
 }
