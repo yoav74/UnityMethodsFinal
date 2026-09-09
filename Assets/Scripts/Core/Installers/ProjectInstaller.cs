@@ -34,5 +34,8 @@ public class ProjectInstaller : MonoInstaller
         // Level flow + death, shared by the whole game.
         Container.Bind<ILevelLoader>().To<SceneLevelLoader>().AsSingle();
         Container.Bind<IDeathService>().To<DeathService>().AsSingle();
+
+        // Fairy invincibility window (Async & Tasks), shared by player + pickups.
+        Container.BindInterfacesTo<Invincibility>().AsSingle();
     }
 }

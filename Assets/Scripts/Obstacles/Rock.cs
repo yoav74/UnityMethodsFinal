@@ -2,10 +2,11 @@ using UnityEngine;
 using Zenject;
 
 /// <summary>
-/// A rock: touching it drains power by <see cref="GameConfig.RockPowerCost"/> (the brief: −3).
-/// It reads the configured cost and the power meter through injection, so it stays ignorant of
-/// how power works. It is <see cref="IDestructible"/> — the boomerang destroys it on contact
-/// (a mount's attack will too, ME-45); the mounted "both disappear" path arrives with mounts.
+/// A rock: on foot, touching it drains power by <see cref="GameConfig.RockPowerCost"/> (the
+/// brief: −3). While <b>mounted</b>, riding into it instead sacrifices the mount — the animal and
+/// the rock both disappear and the player survives, dismounted (ME-50). It is
+/// <see cref="IDestructible"/> so the boomerang and animal attacks shatter it; bonfires, by
+/// contrast, are not.
 /// </summary>
 public class Rock : Hazard, IDestructible
 {
@@ -21,6 +22,14 @@ public class Rock : Hazard, IDestructible
 
     protected override void OnPlayerHit(GameObject player)
     {
+        var mount = player.GetComponent<PlayerMount>();
+        if (mount != null && mount.IsMounted)
+        {
+            mount.Dismount(); // both the animal and the rock disappear; the player survives
+            Destroy(gameObject);
+            return;
+        }
+
         _power?.Drain(_powerCost);
     }
 

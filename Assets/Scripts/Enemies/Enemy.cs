@@ -1,5 +1,4 @@
 using UnityEngine;
-using Zenject;
 
 /// <summary>
 /// Base for every enemy: owns health, the shared damage/death path, and the "touching the player
@@ -8,6 +7,9 @@ using Zenject;
 /// (ME-63) overrides <see cref="TakeDamage"/> to shrug those off. On death it raises
 /// <see cref="Died"/> — the hook the respawn timer (ME-56) and drops (ME-57) attach to — then
 /// removes itself via <see cref="OnDeath"/>.
+///
+/// Touching the player routes through the player's <see cref="IKillable"/>, so the fairy's
+/// invincibility can spare them without the enemy knowing anything about it.
 /// </summary>
 [RequireComponent(typeof(Collider2D))]
 public class Enemy : MonoBehaviour, IDamageable
@@ -17,16 +19,8 @@ public class Enemy : MonoBehaviour, IDamageable
 
     protected int Health { get; private set; }
 
-    private IDeathService _death;
-
     /// <summary>Raised when this enemy dies (respawn timer / drop-on-death listen here).</summary>
     public event System.Action<Enemy> Died;
-
-    [Inject]
-    public void Construct(IDeathService death)
-    {
-        _death = death;
-    }
 
     protected virtual void Awake()
     {
@@ -56,6 +50,19 @@ public class Enemy : MonoBehaviour, IDamageable
     }
 
     /// <summary>
+    /// Force death regardless of health or damage rules — the fairy's kill path, which destroys
+    /// anything on contact (a ghost included, even though it shrugs off <see cref="TakeDamage"/>).
+    /// </summary>
+    public void Kill()
+    {
+        if (Health <= 0)
+            return;
+
+        Health = 0;
+        Die();
+    }
+
+    /// <summary>
     /// How the enemy leaves play once dead: it deactivates rather than destroys, so a respawn
     /// handler (<see cref="RespawnOnDeath"/>, ME-56) can bring the very same instance back at its
     /// spot. Enemies with no respawn simply stay gone. Subclasses may override.
@@ -68,6 +75,6 @@ public class Enemy : MonoBehaviour, IDamageable
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag(playerTag))
-            _death?.Die();
+            other.GetComponent<IKillable>()?.Kill();
     }
 }
