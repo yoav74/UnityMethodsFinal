@@ -143,5 +143,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Egg
   playerTag: Player
-  forcedDrop: {fileID: 2873678061711956497, guid: 39b2648427393994b8cde69c51a05c9e, type: 3}
+  forcedDrop: {fileID: 7783301241137464682, guid: 39b2648427393994b8cde69c51a05c9e, type: 3}
   randomPool: []
