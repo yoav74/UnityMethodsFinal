@@ -72,7 +72,17 @@ public class LevelPlacerWindow : EditorWindow
     private void DrawPaletteGrid()
     {
         const int cols = 4;
-        _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.Height(160));
+        const int cell = 78;   // cell width
+        const int icon = 60;   // preview square
+
+        var caption = new GUIStyle(EditorStyles.miniLabel)
+        {
+            alignment = TextAnchor.UpperCenter,
+            wordWrap = true,
+            fixedWidth = cell
+        };
+
+        _scroll = EditorGUILayout.BeginScrollView(_scroll, GUILayout.Height(210));
         for (int i = 0; i < _palette.Tiles.Count; i++)
         {
             if (i % cols == 0)
@@ -80,12 +90,16 @@ public class LevelPlacerWindow : EditorWindow
 
             var entry = _palette.Tiles[i];
             Texture preview = entry.prefab != null ? AssetPreview.GetAssetPreview(entry.prefab) : null;
-            var content = new GUIContent(entry.DisplayName, preview);
 
+            // Each cell stacks the icon over a wrapped label, so neither is squished.
+            EditorGUILayout.BeginVertical(GUILayout.Width(cell));
             bool on = _selected == i;
-            bool now = GUILayout.Toggle(on, content, GUI.skin.button, GUILayout.Width(72), GUILayout.Height(72));
+            var iconContent = preview != null ? new GUIContent(preview) : new GUIContent(entry.DisplayName);
+            bool now = GUILayout.Toggle(on, iconContent, GUI.skin.button, GUILayout.Width(cell), GUILayout.Height(icon));
             if (now && !on)
                 _selected = i;
+            GUILayout.Label(entry.DisplayName, caption);
+            EditorGUILayout.EndVertical();
 
             if (i % cols == cols - 1 || i == _palette.Tiles.Count - 1)
                 EditorGUILayout.EndHorizontal();
