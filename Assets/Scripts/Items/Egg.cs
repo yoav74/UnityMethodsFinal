@@ -1,21 +1,24 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
 /// <summary>
 /// An egg the player opens on contact to reveal a collectible — an animal, a weapon, or the
-/// fairy — produced by a <see cref="CollectibleFactory"/>. The reveal is selectable per instance:
-/// set <see cref="forcedDrop"/> to force a specific collectible (or leave it empty for none),
-/// which makes testing and showcasing deterministic; otherwise it draws from
-/// <see cref="randomPool"/>. Extends the base <see cref="Pickup"/> so it detects the player and
-/// removes itself; only its effect (spawning the reveal) differs.
+/// fairy — produced by a <see cref="CollectibleFactory"/>. Its reveals are typed as
+/// <see cref="Pickup"/>, so the inspector only lets you assign actual pickupable items (weapons,
+/// animals, the fairy), never a stray prefab. The reveal is selectable per instance: set
+/// <see cref="forcedDrop"/> to force a specific collectible (or leave it empty for none), which
+/// makes testing and showcasing deterministic; otherwise it draws from the <see cref="randomPool"/>
+/// list. Extends the base <see cref="Pickup"/> so it detects the player and removes itself; only its
+/// effect (spawning the reveal) differs.
 /// </summary>
 public class Egg : Pickup
 {
     [Tooltip("Force this exact collectible to be revealed (leave empty for none / use the random pool).")]
-    [SerializeField] private GameObject forcedDrop;
+    [SerializeField] private Pickup forcedDrop;
 
-    [Tooltip("Revealed at random when no forced drop is set.")]
-    [SerializeField] private GameObject[] randomPool;
+    [Tooltip("Revealed at random when no forced drop is set. Weapons, animals or the fairy.")]
+    [SerializeField] private List<Pickup> randomPool = new List<Pickup>();
 
     private IInstantiator _instantiator;
 
