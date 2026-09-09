@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Zenject;
 
@@ -6,10 +7,11 @@ using Zenject;
 /// and flips the sprite to face the way it travels. Physics-based (Rigidbody2D) so it
 /// collides with the ground and level obstacles. Single responsibility: horizontal movement
 /// and facing — jump and attack are separate components (ME-32 / ME-33), which can read
-/// <see cref="FacingRight"/> to fire the right way.
+/// <see cref="FacingRight"/> to fire the right way. It is the scene's <see cref="IFacing"/>
+/// source, so a mount can turn with the player.
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IFacing
 {
     [SerializeField] private float moveSpeed = 6f;
 
@@ -19,6 +21,9 @@ public class PlayerMovement : MonoBehaviour
 
     /// <summary>Which way the player currently faces. Weapons/mounts read this to aim.</summary>
     public bool FacingRight { get; private set; } = true;
+
+    /// <summary>Raised when the facing flips (for a mount to mirror).</summary>
+    public event Action<bool> FacingChanged;
 
     [Inject]
     public void Construct(IInputService input)
@@ -45,8 +50,13 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetFacing(bool right)
     {
+        if (right == FacingRight)
+            return; // no change — don't spam the event
+
         FacingRight = right;
         if (_sprite != null)
             _sprite.flipX = !right; // art faces right by default; flip when moving left
+
+        FacingChanged?.Invoke(right);
     }
 }

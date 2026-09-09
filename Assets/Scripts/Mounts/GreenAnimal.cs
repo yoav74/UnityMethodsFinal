@@ -10,7 +10,7 @@ public class GreenAnimal : Animal
 {
     [SerializeField] private float spinRadius = 1.5f;
 
-    public override void Attack(Vector2 direction)
+    protected override void PerformAttack(Vector2 direction)
     {
         HitAround(spinRadius);
     }
