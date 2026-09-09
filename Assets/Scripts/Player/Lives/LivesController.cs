@@ -12,11 +12,13 @@ public class LivesController : IInitializable, System.IDisposable
 {
     private readonly LivesModel _model;
     private readonly ILevelLoader _levels;
+    private readonly FruitCounter _fruits;
 
-    public LivesController(LivesModel model, ILevelLoader levels)
+    public LivesController(LivesModel model, ILevelLoader levels, FruitCounter fruits)
     {
         _model = model;
         _levels = levels;
+        _fruits = fruits;
     }
 
     public void Initialize()
@@ -33,6 +35,7 @@ public class LivesController : IInitializable, System.IDisposable
     {
         Debug.Log("Game over - resetting to the first level.");
         _model.ResetToStart();
+        _fruits.Reset(); // a fresh game starts fruit progress at zero
         _levels.LoadFirst();
     }
 }
