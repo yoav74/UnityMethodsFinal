@@ -2,13 +2,16 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Base rideable animal. Provides the <b>shared attack rules</b> (ME-50) as its default attack —
-/// a short reach in front that damages enemies (via <see cref="IDamageable"/>, so the ghost
-/// shrugs it off) and shatters rocks (via <see cref="IDestructible"/>) but never bonfires (those
-/// are <see cref="IFairyDestructible"/>). The three specific animals extend this and override
-/// <see cref="Attack"/> for their own style — a tail swipe, a fire spit, a spin (ME-46/47/48).
+/// Base rideable animal. It owns the <b>shared attack rules</b> (ME-50) as reusable helpers —
+/// <see cref="HitInFront"/>, <see cref="HitAround"/> — that damage enemies (via
+/// <see cref="IDamageable"/>, so the ghost shrugs them off) and shatter rocks (via
+/// <see cref="IDestructible"/>) but never bonfires (those are <see cref="IFairyDestructible"/>). It
+/// is <b>abstract</b> and leaves <see cref="Attack"/> unimplemented on purpose: there is no
+/// "default animal", so every concrete animal must declare its own style — a tail swipe, a fire
+/// spit, a spin (ME-46/47/48) — rather than silently inheriting one (Open/Closed, and no base you
+/// can instantiate by accident).
 /// </summary>
-public class Animal : MonoBehaviour, IMount
+public abstract class Animal : MonoBehaviour, IMount
 {
     [SerializeField] private string displayName = "Animal";
     [SerializeField] private Sprite icon;
@@ -22,10 +25,8 @@ public class Animal : MonoBehaviour, IMount
     public string DisplayName => displayName;
     public Sprite Icon => icon;
 
-    public virtual void Attack(Vector2 direction)
-    {
-        HitInFront(direction);
-    }
+    /// <summary>Each animal defines its own attack, built from the shared hit helpers below.</summary>
+    public abstract void Attack(Vector2 direction);
 
     /// <summary>The shared melee reach in the facing direction (a tail swipe).</summary>
     protected void HitInFront(Vector2 direction)
