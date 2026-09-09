@@ -60,5 +60,9 @@ crashlytics-build.properties
 /Assets/Ready_Sprites.zip
 /Assets/Ready_Sprites.zip.meta
 
+# TextMesh Pro imported package assets (regenerable; the game uses uGUI Text, not TMP)
+/Assets/TextMesh Pro/
+/Assets/TextMesh Pro.meta
+
 # Claude Code local tooling (skills, settings) - not part of the game
 .claude/
