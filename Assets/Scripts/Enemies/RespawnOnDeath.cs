@@ -41,6 +41,14 @@ public class RespawnOnDeath : MonoBehaviour
 
     private void OnDied(Enemy enemy)
     {
+        // Respect the Inspector checkbox: a designer can switch respawning off per enemy. We can't
+        // subscribe in OnEnable/unsubscribe in OnDisable, because dying deactivates the GameObject
+        // (which would fire OnDisable and cancel the very respawn we want). Awake runs even on a
+        // disabled component, so instead we check `enabled` here — false only when the user unticked
+        // it, since a normal death leaves `enabled` true while the GameObject goes inactive.
+        if (!enabled)
+            return;
+
         _ = RespawnAfterDelay(_cts.Token);
     }
 
