@@ -1,13 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// A snake that shoots a fireball at intervals. Extends <see cref="Enemy"/> for health, the
-/// shared death path and player-contact damage, and reuses the projectile Builder/Factory/Pool
+/// A snake that shoots a fireball at intervals. Extends <see cref="DamageableEnemy"/> for health,
+/// the shared death path and player-contact damage, and reuses the projectile Builder/Factory/Pool
 /// (via <see cref="ProjectileFactory"/> + <see cref="ProjectilePool"/>) to spawn fireballs — the
 /// same pooling the player's weapons use. Pooled fireballs live under a runtime container so they
 /// are never serialized into the scene.
 /// </summary>
-public class ShootingSnake : Enemy
+public class ShootingSnake : DamageableEnemy
 {
     [SerializeField] private GameObject fireballPrefab;
     [SerializeField] private float fireInterval = 2f;

@@ -1,10 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// Ghost enemy: nothing destroys it except the fairy. It overrides <see cref="Enemy.TakeDamage"/>
-/// to ignore weapons and mount attacks entirely (Open/Closed — the base and every weapon stay
-/// unchanged), while still dying through the shared path when the fairy calls <see cref="Enemy.Kill"/>
-/// (ME-64). It drifts and bobs like a hovering ghost.
+/// Ghost enemy: nothing destroys it except the fairy. Unlike the other enemies it is <b>not</b>
+/// <see cref="IDamageable"/> at all — it extends <see cref="Enemy"/> directly rather than
+/// <see cref="DamageableEnemy"/> — so weapons and mount attacks (which look for an
+/// <see cref="IDamageable"/>) simply find nothing to hit and leave it alone. No empty "ignore damage"
+/// override is needed; immunity falls out of the type instead of being faked (Interface Segregation
+/// / Liskov). The fairy still removes it through the shared <see cref="Enemy.Kill"/> path (ME-64).
+/// It drifts and bobs like a hovering ghost.
 /// </summary>
 public class Ghost : Enemy
 {
@@ -16,15 +19,9 @@ public class Ghost : Enemy
     private Vector3 _origin;
     private float _time;
 
-    protected override void Awake()
+    private void Awake()
     {
-        base.Awake();
         _origin = transform.position;
-    }
-
-    /// <summary>A ghost is immune to ordinary damage; only the fairy (via <see cref="Enemy.Kill"/>) removes it.</summary>
-    public override void TakeDamage(int amount)
-    {
     }
 
     private void Update()

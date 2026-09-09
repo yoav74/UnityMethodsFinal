@@ -2,10 +2,10 @@ using UnityEngine;
 
 /// <summary>
 /// Bird enemy: flies steadily to the left while bobbing down and up along a sine path. Extends
-/// <see cref="Enemy"/> for health, the shared death path and player-contact damage, adding only
-/// its movement (Open/Closed).
+/// <see cref="DamageableEnemy"/> for health, the shared death path and player-contact damage, adding
+/// only its movement (Open/Closed).
 /// </summary>
-public class Bird : Enemy
+public class Bird : DamageableEnemy
 {
     [SerializeField] private float speed = 3f;
     [SerializeField] private float bobAmplitude = 1f;

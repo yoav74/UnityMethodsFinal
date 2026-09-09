@@ -1,12 +1,12 @@
 using UnityEngine;
 
 /// <summary>
-/// Snake that hops forward in arcs along the ground. Extends <see cref="Enemy"/> for health, the
-/// shared death path and player-contact damage, adding only its movement (Open/Closed). The hop
+/// Snake that hops forward in arcs along the ground. Extends <see cref="DamageableEnemy"/> for
+/// health, the shared death path and player-contact damage, adding only its movement (Open/Closed). The hop
 /// is a scripted parabola (kinematic), advancing one hop distance each cycle with a pause between
 /// hops, so it never needs ground physics.
 /// </summary>
-public class JumpingSnake : Enemy
+public class JumpingSnake : DamageableEnemy
 {
     [SerializeField] private float hopDistance = 2f;
     [SerializeField] private float hopHeight = 1.2f;

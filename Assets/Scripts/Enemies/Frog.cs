@@ -2,17 +2,18 @@ using UnityEngine;
 
 /// <summary>
 /// Frog enemy: sits still until the player comes within range, then leaps — high and far — in a
-/// scripted parabola toward the player, with a cooldown between leaps. Extends <see cref="Enemy"/>
-/// for health, the shared death path and player-contact damage, adding only its movement (OCP).
+/// scripted parabola toward the player, with a cooldown between leaps. Extends
+/// <see cref="DamageableEnemy"/> for health, the shared death path and player-contact damage, adding
+/// only its movement (OCP).
 /// </summary>
-public class Frog : Enemy
+public class Frog : DamageableEnemy
 {
     [SerializeField] private float detectRange = 4f;
     [SerializeField] private float jumpDistance = 3f;
     [SerializeField] private float jumpHeight = 3f;
     [SerializeField] private float jumpDuration = 0.7f;
     [SerializeField] private float cooldown = 1f;
-    [SerializeField] private string playerTag = "Player";
+    // playerTag is inherited from Enemy (declaring it again would serialize the name twice).
 
     private Transform _player;
     private float _groundY;
