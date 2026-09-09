@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ThrowWeapon
   displayName: Hammer
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 9baaddf4cb94a2041a18e13602703d33, type: 3}
   projectilePrefab: {fileID: 6142138197696857184, guid: e52224a9d72986c4882e597592624b01, type: 3}
   projectileSpeed: 10
   projectileLifetime: 2.5
