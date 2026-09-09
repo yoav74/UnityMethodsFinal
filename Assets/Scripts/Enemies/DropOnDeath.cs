@@ -35,6 +35,7 @@ public class DropOnDeath : MonoBehaviour
         if (dropPrefab == null || Random.value > dropChance)
             return;
 
-        Instantiate(dropPrefab, transform.position, Quaternion.identity);
+        GameObject drop = Instantiate(dropPrefab, transform.position, Quaternion.identity);
+        FallToGround.Attach(drop); // let it settle on the ground rather than float where the enemy died
     }
 }
