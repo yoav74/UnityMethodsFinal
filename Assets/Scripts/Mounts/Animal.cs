@@ -40,20 +40,29 @@ public abstract class Animal : MonoBehaviour, IMount
 
     private SpriteRenderer _sprite;
     private IFacing _facing;
-    private Vector3 _baseScale;
+    private Vector3 _baseScale = Vector3.one;
+    private Vector3 _basePos;
+    private Quaternion _baseRot = Quaternion.identity;
     private Coroutine _feedback;
 
     public string DisplayName => displayName;
     public Sprite Icon => icon;
 
+    protected float FeedbackSeconds => attackFeedbackSeconds;
+
     protected virtual void Awake()
     {
         _sprite = GetComponentInChildren<SpriteRenderer>();
-        _baseScale = transform.localScale;
     }
 
     private void Start()
     {
+        // Capture the resting transform AFTER the pickup has parented + zeroed us, so the attack
+        // feedback (scale/lunge/spin) restores to the right place.
+        _baseScale = transform.localScale;
+        _basePos = transform.localPosition;
+        _baseRot = transform.localRotation;
+
         // Once spawned under the player, mirror its facing and sit just behind the rider.
         _facing = GetComponentInParent<IFacing>();
         if (_facing != null)
@@ -121,9 +130,9 @@ public abstract class Animal : MonoBehaviour, IMount
         }
     }
 
-    // Visible tell that an attack happened: a short "lunge" scale-punch on the mount plus, if set,
-    // a spawned effect at the strike point. It is a scale punch (not a colour flash) so it never
-    // fights the fairy's invincibility tint, which drives colour.
+    // Visible tell that an attack happened. The *motion* is what distinguishes the animals on screen:
+    // the base does a lunge scale-punch (used by the fire-spitter, whose projectile is the real tell),
+    // while the melee and spin animals override <see cref="AttackFeedback"/> with their own move.
     private void PlayAttackFeedback(Vector2 direction)
     {
         Vector2 dir = direction.sqrMagnitude > 0f ? direction.normalized : (Vector2)(FacingSign() * Vector2.right);
@@ -139,15 +148,35 @@ public abstract class Animal : MonoBehaviour, IMount
 
         if (_feedback != null)
             StopCoroutine(_feedback);
-        _feedback = StartCoroutine(LungePunch());
+        _feedback = StartCoroutine(RunFeedback(dir));
     }
 
-    private float FacingSign()
+    // Runs this animal's feedback move, then snaps the transform back to rest so overlapping attacks
+    // never accumulate an offset/rotation.
+    private IEnumerator RunFeedback(Vector2 dir)
+    {
+        yield return AttackFeedback(dir);
+        transform.localScale = _baseScale;
+        transform.localPosition = _basePos;
+        transform.localRotation = _baseRot;
+        _feedback = null;
+    }
+
+    /// <summary>+1 facing right, -1 facing left — for aiming a feedback move.</summary>
+    protected float FacingSign()
     {
         return _facing != null && !_facing.FacingRight ? -1f : 1f;
     }
 
-    private IEnumerator LungePunch()
+    /// <summary>The resting local scale, so subclasses can scale relative to it.</summary>
+    protected Vector3 BaseScale => _baseScale;
+
+    /// <summary>
+    /// The default attack move: a quick scale "punch" (used by the fire animal). Blue overrides it
+    /// with a forward lunge, green with a spin. It is a scale/motion tween (not a colour flash) so it
+    /// never fights the fairy's invincibility tint, which drives colour.
+    /// </summary>
+    protected virtual IEnumerator AttackFeedback(Vector2 dir)
     {
         float t = 0f;
         while (t < attackFeedbackSeconds)
@@ -157,7 +186,5 @@ public abstract class Animal : MonoBehaviour, IMount
             transform.localScale = _baseScale * (1f + (attackLungeScale - 1f) * k);
             yield return null;
         }
-        transform.localScale = _baseScale;
-        _feedback = null;
     }
 }

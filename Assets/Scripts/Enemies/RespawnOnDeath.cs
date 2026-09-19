@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
-/// Respawns its <see cref="Enemy"/> a set time after it dies (the brief: a killed enemy
-/// reappears at its original spot). Uses an <b>async Task</b> countdown (Async &amp; Tasks): on
-/// <see cref="Enemy.Died"/> it awaits <see cref="Task.Delay(TimeSpan, CancellationToken)"/>, then
-/// moves the enemy back to its captured spawn point and reactivates it (which resets its health).
-/// The token is cancelled in <see cref="OnDestroy"/> — i.e. on level end — so no respawn fires
-/// after teardown; deactivation on death does not cancel it, which is what lets the enemy come
-/// back. Await continuations resume on Unity's main thread, so touching the transform is safe.
+/// Respawns its <see cref="Enemy"/> a set time after it dies, <b>at the spot where it died</b> (the
+/// brief: a killed enemy reappears where it was destroyed). Uses an <b>async Task</b> countdown
+/// (Async &amp; Tasks): on <see cref="Enemy.Died"/> it records the death position, awaits
+/// <see cref="Task.Delay(TimeSpan, CancellationToken)"/>, then moves the enemy back there and
+/// reactivates it — which resets its health <i>and</i> restarts its movement from that spot (each
+/// mover re-captures its origin in <c>OnEnable</c>). The token is cancelled in <see cref="OnDestroy"/>
+/// — i.e. on level end — so no respawn fires after teardown; deactivation on death does not cancel
+/// it, which is what lets the enemy come back. Await continuations resume on Unity's main thread, so
+/// touching the transform is safe.
 /// </summary>
 [RequireComponent(typeof(Enemy))]
 public class RespawnOnDeath : MonoBehaviour
@@ -18,13 +20,12 @@ public class RespawnOnDeath : MonoBehaviour
     [SerializeField] private float respawnSeconds = 3f;
 
     private Enemy _enemy;
-    private Vector3 _spawnPoint;
+    private Vector3 _deathPosition;
     private CancellationTokenSource _cts;
 
     private void Awake()
     {
         _enemy = GetComponent<Enemy>();
-        _spawnPoint = transform.position;
         _cts = new CancellationTokenSource();
         _enemy.Died += OnDied;
     }
@@ -49,6 +50,7 @@ public class RespawnOnDeath : MonoBehaviour
         if (!enabled)
             return;
 
+        _deathPosition = transform.position; // captured before the enemy deactivates — where it died
         _ = RespawnAfterDelay(_cts.Token);
     }
 
@@ -57,8 +59,8 @@ public class RespawnOnDeath : MonoBehaviour
         try
         {
             await Task.Delay(TimeSpan.FromSeconds(respawnSeconds), token);
-            transform.position = _spawnPoint;
-            gameObject.SetActive(true); // reactivation resets health via Enemy.OnEnable
+            transform.position = _deathPosition;
+            gameObject.SetActive(true); // reactivation resets health + movement via OnEnable
         }
         catch (OperationCanceledException)
         {

@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34ffa832ffcf8be45b5e68f19ce336b5, type: 3}
+  m_Name: LevelTilePalette
+  m_EditorClassIdentifier: Assembly-CSharp::LevelTilePalette
+  tiles:
+  - id: 1
+    prefab: {fileID: 4663421459362699102, guid: 780a74840e3a0964abb3fc8a90d43630, type: 3}
+    label: 
+  - id: 2
+    prefab: {fileID: 7150515439102190123, guid: 1ef3c51345a666b4fba9b95ec7786361, type: 3}
+    label: 
+  - id: 3
+    prefab: {fileID: 8688400136456459483, guid: c39d46a28c3ac554081aa3d5c547cb24, type: 3}
+    label: 
+  - id: 4
+    prefab: {fileID: 2863384376763863844, guid: 84c9f140e727bf4458ff57c4a8f2ba61, type: 3}
+    label: 
+  - id: 5
+    prefab: {fileID: 2304129592591348551, guid: 4cf53a624b0bbdc43896d0f4629a841c, type: 3}
+    label: 
+  - id: 6
+    prefab: {fileID: 4232491669451473724, guid: 87eddc0d21bd32a40a783f261c927730, type: 3}
+    label: 
+  - id: 7
+    prefab: {fileID: 6879855668844872124, guid: 09c3d87408029ed4ca1e3aea1e90dc10, type: 3}
+    label: 
+  - id: 8
+    prefab: {fileID: 8122313892017353710, guid: 4f07e7ecd38e8b746a297b9985005f85, type: 3}
+    label: 
+  - id: 9
+    prefab: {fileID: 8493253422255688878, guid: 12a213897d30fa14bbb97dfe22327f81, type: 3}
+    label: 
+  - id: 10
+    prefab: {fileID: 2448609301113706606, guid: e2243ceab6b98754aa1432cc9e013e51, type: 3}
+    label: 
+  - id: 11
+    prefab: {fileID: 4406926064140445530, guid: 1c307c19a37ee1a46abc43af349bbbbe, type: 3}
+    label: 
+  - id: 12
+    prefab: {fileID: 8491426134491736051, guid: 86a70b360c1b45d439cc9e7b47265293, type: 3}
+    label: 
+  - id: 13
+    prefab: {fileID: 137118454976923859, guid: 3a050a2c5843c0745830a5758a46e670, type: 3}
+    label: 
+  - id: 14
+    prefab: {fileID: 1547162789090400917, guid: 78b6aed2233527d4fa6b4a5e22a7375a, type: 3}
+    label: 
+  - id: 15
+    prefab: {fileID: 2873678061711956497, guid: 39b2648427393994b8cde69c51a05c9e, type: 3}
+    label: 
+  - id: 16
+    prefab: {fileID: 5405432420798526593, guid: 027db92274e2d9c438cc1b17a6a06ed4, type: 3}
+    label: 
+  - id: 17
+    prefab: {fileID: 3635329924065365795, guid: bf2879283de193946aa00bc6df69517f, type: 3}
+    label: 
+  - id: 18
+    prefab: {fileID: 5703581085155188683, guid: 5021006744e7abf488962810754afe37, type: 3}
+    label: 

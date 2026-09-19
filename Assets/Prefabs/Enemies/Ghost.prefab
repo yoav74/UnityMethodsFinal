@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3765879966553419027}
   - component: {fileID: 966472477159022331}
   - component: {fileID: 4796800638467194928}
+  - component: {fileID: 5339576115671219110}
   m_Layer: 0
   m_Name: Ghost
   m_TagString: Untagged
@@ -170,9 +171,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4086b27b767a5654fbc1ae08ec02d47a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ghost
-  maxHealth: 1
   playerTag: Player
   driftSpeed: 1
   bobAmplitude: 0.5
   bobFrequency: 2
   direction: -1
+--- !u!114 &5339576115671219110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8122313892017353710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d324fac3bfa00a24dafbcf24abe4dc5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RespawnOnDeath
+  respawnSeconds: 3

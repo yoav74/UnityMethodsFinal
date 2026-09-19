@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6742635463083084438}
   - component: {fileID: 4580018052843020751}
   - component: {fileID: 8680261192721849970}
+  - component: {fileID: 8678212380737283660}
   m_Layer: 0
   m_Name: JumpingSnake
   m_TagString: Untagged
@@ -170,10 +171,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f28b9238eb12044814b8b0f46bbb00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JumpingSnake
-  maxHealth: 1
   playerTag: Player
+  maxHealth: 1
   hopDistance: 2
   hopHeight: 1.2
   hopDuration: 0.6
   pauseDuration: 0.6
   direction: -1
+--- !u!114 &8678212380737283660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8493253422255688878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d324fac3bfa00a24dafbcf24abe4dc5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RespawnOnDeath
+  respawnSeconds: 3
