@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9217567069621769766}
   - component: {fileID: 6298052620762365288}
   - component: {fileID: 5876902302522247792}
+  - component: {fileID: 3442407223022210653}
   m_Layer: 0
   m_Name: ShootingSnake
   m_TagString: Untagged
@@ -170,8 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbd7077fcaf66c34782d5dd49dd00643, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShootingSnake
-  maxHealth: 1
   playerTag: Player
+  maxHealth: 1
   fireballPrefab: {fileID: 7192451703302685872, guid: 30dd2c05e0bc6934c8050f7d11216645, type: 3}
   fireInterval: 1
   projectileSpeed: 5
@@ -179,3 +180,16 @@ MonoBehaviour:
   projectileSize: 1
   poolSize: 4
   facing: -1
+--- !u!114 &3442407223022210653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2448609301113706606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d324fac3bfa00a24dafbcf24abe4dc5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RespawnOnDeath
+  respawnSeconds: 3

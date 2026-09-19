@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3171584173481274103}
   - component: {fileID: 1398104547624548651}
   - component: {fileID: 715666143606587592}
+  - component: {fileID: 1725160227896150961}
   m_Layer: 0
   m_Name: Frog
   m_TagString: Untagged
@@ -170,11 +171,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7d58f5b241ea1a4e9c741bd42bfa9a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Frog
-  maxHealth: 1
   playerTag: Player
+  maxHealth: 1
   detectRange: 4
   jumpDistance: 3
   jumpHeight: 3
   jumpDuration: 0.7
   cooldown: 1
-  playerTag: Player
+--- !u!114 &1725160227896150961
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6879855668844872124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d324fac3bfa00a24dafbcf24abe4dc5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RespawnOnDeath
+  respawnSeconds: 3
