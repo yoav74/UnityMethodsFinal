@@ -14,4 +14,7 @@ public interface IInputService
 
     /// <summary>True on the frame the attack button went down.</summary>
     bool AttackPressed { get; }
+
+    /// <summary>True on the frame the "switch weapon" button went down.</summary>
+    bool SwapPressed { get; }
 }

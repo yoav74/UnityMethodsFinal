@@ -30,6 +30,10 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
+        // Switch to the next collected weapon (no effect while mounted or carrying one weapon).
+        if (_input.SwapPressed)
+            _inventory.SelectNext();
+
         if (!_input.AttackPressed)
             return;
 

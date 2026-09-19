@@ -9,7 +9,7 @@ using Zenject;
 /// <see cref="Initialize"/> to enable the Player action map and <see cref="Dispose"/> to
 /// disable it, so the map's lifetime matches the container's.
 ///
-/// Single responsibility: translate the Input System into the three signals the game needs.
+/// Single responsibility: translate the Input System into the signals the game needs.
 /// </summary>
 public class InputService : IInputService, IInitializable, IDisposable
 {
@@ -21,6 +21,7 @@ public class InputService : IInputService, IInitializable, IDisposable
     private InputAction _move;
     private InputAction _jump;
     private InputAction _attack;
+    private InputAction _swap;
 
     public InputService(InputActionAsset actions)
     {
@@ -39,6 +40,7 @@ public class InputService : IInputService, IInitializable, IDisposable
         _move = _playerMap.FindAction("Move", throwIfNotFound: true);
         _jump = _playerMap.FindAction("Jump", throwIfNotFound: true);
         _attack = _playerMap.FindAction("Attack", throwIfNotFound: true);
+        _swap = _playerMap.FindAction("Swap", throwIfNotFound: false); // optional — null if not in the asset
 
         _playerMap.Enable();
     }
@@ -53,4 +55,6 @@ public class InputService : IInputService, IInitializable, IDisposable
     public bool JumpPressed => _jump != null && _jump.WasPressedThisFrame();
 
     public bool AttackPressed => _attack != null && _attack.WasPressedThisFrame();
+
+    public bool SwapPressed => _swap != null && _swap.WasPressedThisFrame();
 }
