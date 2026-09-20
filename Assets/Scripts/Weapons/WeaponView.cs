@@ -4,26 +4,32 @@ using UnityEngine.UI;
 /// <summary>
 /// <b>View</b> for the active weapon (and later mount): shows the equipped weapon's name and
 /// re-renders when it changes, subscribing to <see cref="WeaponInventory.CurrentChanged"/> so it
-/// never polls. The inventory is a scene component (on the player), referenced directly.
+/// never polls. The inventory lives on the player; the HUD finds it by tag at start rather than
+/// holding a serialized cross-object reference, so the HUD can be a scene-independent prefab (no
+/// per-scene wiring back to that scene's player).
 /// </summary>
 public class WeaponView : MonoBehaviour
 {
     [SerializeField] private Text label;
-    [SerializeField] private WeaponInventory inventory;
+    [SerializeField] private string playerTag = "Player";
+
+    private WeaponInventory _inventory;
 
     private void Start()
     {
-        if (inventory == null)
+        var player = GameObject.FindWithTag(playerTag);
+        _inventory = player != null ? player.GetComponent<WeaponInventory>() : null;
+        if (_inventory == null)
             return;
 
-        inventory.CurrentChanged += Render;
-        Render(inventory.Current);
+        _inventory.CurrentChanged += Render;
+        Render(_inventory.Current);
     }
 
     private void OnDestroy()
     {
-        if (inventory != null)
-            inventory.CurrentChanged -= Render;
+        if (_inventory != null)
+            _inventory.CurrentChanged -= Render;
     }
 
     private void Render(IWeapon weapon)
