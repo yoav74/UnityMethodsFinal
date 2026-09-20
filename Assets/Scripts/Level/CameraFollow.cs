@@ -13,6 +13,10 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private string targetTag = "Player";
     [SerializeField] private float lookAhead = 2.5f;
     [SerializeField] private float smoothTime = 0.15f;
+    [Tooltip("Track the player horizontally (a side-scroller). Off = hold a fixed X for a narrow vertical shaft.")]
+    [SerializeField] private bool followX = true;
+    [SerializeField] private float fixedX = 0f;
+    [Tooltip("Track the player vertically (a climb). Off = hold a fixed Y for a flat side-scroller.")]
     [SerializeField] private bool followY = false;
     [SerializeField] private float fixedY = 0f;
     [SerializeField] private bool clampLeft = true;
@@ -31,6 +35,8 @@ public class CameraFollow : MonoBehaviour
 
         if (fixedY == 0f)
             fixedY = transform.position.y; // default to wherever the camera starts
+        if (fixedX == 0f)
+            fixedX = transform.position.x;
     }
 
     private void LateUpdate()
@@ -38,9 +44,17 @@ public class CameraFollow : MonoBehaviour
         if (target == null)
             return;
 
-        float x = target.position.x + lookAhead;
-        if (clampLeft)
-            x = Mathf.Max(x, minX);
+        float x;
+        if (followX)
+        {
+            x = target.position.x + lookAhead;
+            if (clampLeft)
+                x = Mathf.Max(x, minX);
+        }
+        else
+        {
+            x = fixedX;
+        }
 
         float y = followY ? target.position.y : fixedY;
 
