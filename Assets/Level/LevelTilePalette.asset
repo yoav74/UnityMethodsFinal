@@ -67,3 +67,6 @@ MonoBehaviour:
   - id: 18
     prefab: {fileID: 5703581085155188683, guid: 5021006744e7abf488962810754afe37, type: 3}
     label: 
+  - id: 18
+    prefab: {fileID: 1404840723665739080, guid: cc634652c4f999b449b97277d7dec07c, type: 3}
+    label: Platform

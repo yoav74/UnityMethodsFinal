@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6298052620762365288}
   - component: {fileID: 5876902302522247792}
   - component: {fileID: 3442407223022210653}
+  - component: {fileID: 5454264801688698533}
   m_Layer: 0
   m_Name: ShootingSnake
   m_TagString: Untagged
@@ -87,7 +88,7 @@ SpriteRenderer:
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: daaf8c75d724a074aaa14fcb53edd5d9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 0.96, y: 0.96}
@@ -174,7 +175,7 @@ MonoBehaviour:
   playerTag: Player
   maxHealth: 1
   fireballPrefab: {fileID: 7192451703302685872, guid: 30dd2c05e0bc6934c8050f7d11216645, type: 3}
-  fireInterval: 1
+  fireInterval: 3
   projectileSpeed: 5
   projectileLifetime: 3
   projectileSize: 1
@@ -192,4 +193,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d324fac3bfa00a24dafbcf24abe4dc5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RespawnOnDeath
-  respawnSeconds: 3
+  respawnSeconds: 5
+--- !u!114 &5454264801688698533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2448609301113706606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 643ad335499782e478e82b7762bd3c3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DropOnDeath
+  dropPrefab: {fileID: 5703581085155188683, guid: 5021006744e7abf488962810754afe37, type: 3}
+  dropChance: 1

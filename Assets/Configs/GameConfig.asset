@@ -15,5 +15,6 @@ MonoBehaviour:
   startingLives: 3
   fruitsPerExtraLife: 20
   startingPower: 10
-  powerDrainSeconds: 2
+  powerDrainSeconds: 4
   rockPowerCost: 3
+  fairyInvincibilitySeconds: 10
