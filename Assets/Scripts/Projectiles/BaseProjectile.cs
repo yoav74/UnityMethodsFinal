@@ -43,8 +43,6 @@ public abstract class BaseProjectile : MonoBehaviour
         OnFired(direction);
     }
 
-    public void Fire() => Fire(Vector2.right);
-
     /// <summary>Set motion params in code (used by the builder).</summary>
     public void Configure(float projectileSpeed, float projectileLifetime)
     {
