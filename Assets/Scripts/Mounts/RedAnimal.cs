@@ -15,7 +15,7 @@ public class RedAnimal : Animal
     [SerializeField] private float projectileSize = 1f;
     [SerializeField] private int poolSize = 4;
 
-    private ProjectilePool _pool;
+    private ProjectileEmitter _emitter;
 
     protected override void Awake()
     {
@@ -26,21 +26,12 @@ public class RedAnimal : Animal
             return;
         }
 
-        var container = new GameObject($"{name}_FirePool");
-        var factory = new ProjectileFactory(fireProjectilePrefab, projectileSpeed, projectileLifetime, projectileSize);
-        _pool = new ProjectilePool(factory, poolSize, container.transform);
+        _emitter = new ProjectileEmitter(fireProjectilePrefab, projectileSpeed, projectileLifetime, projectileSize, poolSize, $"{name}_FirePool");
     }
 
     protected override void PerformAttack(Vector2 direction)
     {
-        if (_pool == null)
-            return;
-
-        BaseProjectile fire = _pool.Get();
-        if (fire == null)
-            return; // pool exhausted
-
-        fire.transform.position = transform.position;
-        fire.Fire(direction);
+        // This animal's own strike shape: a pooled fireball in the facing direction.
+        _emitter?.Fire(transform.position, direction);
     }
 }
