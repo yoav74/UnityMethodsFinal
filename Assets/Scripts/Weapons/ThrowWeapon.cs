@@ -18,7 +18,7 @@ public class ThrowWeapon : MonoBehaviour, IWeapon
     [SerializeField] private int poolSize = 8;
     [SerializeField] private Transform muzzle;
 
-    private ProjectilePool _pool;
+    private ProjectileEmitter _emitter;
 
     public string DisplayName => displayName;
 
@@ -30,23 +30,12 @@ public class ThrowWeapon : MonoBehaviour, IWeapon
             return;
         }
 
-        // Park the reserve under a runtime container so pooled instances are never
-        // serialized into the scene (they belong to play mode only).
-        var container = new GameObject($"{name}_Pool");
-        var factory = new ProjectileFactory(projectilePrefab, projectileSpeed, projectileLifetime, projectileSize);
-        _pool = new ProjectilePool(factory, poolSize, container.transform);
+        _emitter = new ProjectileEmitter(projectilePrefab, projectileSpeed, projectileLifetime, projectileSize, poolSize, $"{name}_Pool");
     }
 
     public void Attack(Vector2 direction)
     {
-        if (_pool == null)
-            return;
-
-        BaseProjectile projectile = _pool.Get();
-        if (projectile == null)
-            return; // pool exhausted
-
-        projectile.transform.position = muzzle != null ? muzzle.position : transform.position;
-        projectile.Fire(direction);
+        Vector2 origin = muzzle != null ? muzzle.position : transform.position;
+        _emitter?.Fire(origin, direction);
     }
 }

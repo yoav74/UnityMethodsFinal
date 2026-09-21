@@ -17,7 +17,7 @@ public class ShootingSnake : DamageableEnemy
     [SerializeField] private int poolSize = 4;
     [SerializeField] private float facing = -1f;
 
-    private ProjectilePool _pool;
+    private ProjectileEmitter _emitter;
     private float _timer;
 
     protected override void Awake()
@@ -29,14 +29,12 @@ public class ShootingSnake : DamageableEnemy
             return;
         }
 
-        var container = new GameObject($"{name}_FireballPool");
-        var factory = new ProjectileFactory(fireballPrefab, projectileSpeed, projectileLifetime, projectileSize);
-        _pool = new ProjectilePool(factory, poolSize, container.transform);
+        _emitter = new ProjectileEmitter(fireballPrefab, projectileSpeed, projectileLifetime, projectileSize, poolSize, $"{name}_FireballPool");
     }
 
     private void Update()
     {
-        if (_pool == null)
+        if (_emitter == null)
             return;
 
         _timer += Time.deltaTime;
@@ -44,11 +42,6 @@ public class ShootingSnake : DamageableEnemy
             return;
 
         _timer = 0f;
-        BaseProjectile fireball = _pool.Get();
-        if (fireball == null)
-            return; // pool exhausted
-
-        fireball.transform.position = transform.position;
-        fireball.Fire(new Vector2(facing, 0f));
+        _emitter.Fire(transform.position, new Vector2(facing, 0f));
     }
 }
