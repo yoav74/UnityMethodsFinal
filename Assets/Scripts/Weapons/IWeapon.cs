@@ -1,15 +1,10 @@
-using UnityEngine;
-
 /// <summary>
-/// A weapon the player can attack with. The player's attack routes to the current weapon
-/// (or a mount) through this abstraction, so new weapons plug in without changing the caller
-/// (OCP/DIP). Name + Icon feed the HUD.
+/// A weapon the player can attack with, plus the name the HUD shows. It extends
+/// <see cref="IAttacker"/> — so the player's attack treats weapons and mounts alike — and adds only
+/// <see cref="DisplayName"/>, which is the one extra member a client actually reads (WeaponView).
+/// New weapons plug in without changing the caller (OCP/DIP).
 /// </summary>
-public interface IWeapon
+public interface IWeapon : IAttacker
 {
     string DisplayName { get; }
-    Sprite Icon { get; }
-
-    /// <summary>Attack in the given aim direction (e.g. the way the player faces).</summary>
-    void Attack(Vector2 direction);
 }

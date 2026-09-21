@@ -2,10 +2,10 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Green animal mount: its attack is a <b>spin</b> in place — a full circle around itself
-/// (<see cref="Animal.HitAround"/>) so it strikes on all sides, following the shared animal rules
-/// (damages enemies, shatters rocks, spares bonfires). On screen it <b>rotates a full turn</b>, which
-/// reads clearly as a spin and distinct from the blue animal's forward swipe. Collected via the star
+/// Green animal mount: its attack is a <b>spin</b> in place — a full circle around itself so it
+/// strikes on all sides, routed through the shared <see cref="Animal.ApplyHit"/> rule (damages
+/// enemies, shatters rocks, spares bonfires). On screen it <b>rotates a full turn</b>, which reads
+/// clearly as a spin and distinct from the blue animal's forward swipe. Collected via the star
 /// pickup (ME-49).
 /// </summary>
 public class GreenAnimal : Animal
@@ -15,7 +15,8 @@ public class GreenAnimal : Animal
 
     protected override void PerformAttack(Vector2 direction)
     {
-        HitAround(spinRadius);
+        // This animal's own strike shape: a full circle centred on itself.
+        ApplyHit(transform.position, spinRadius);
     }
 
     protected override IEnumerator AttackFeedback(Vector2 dir)
