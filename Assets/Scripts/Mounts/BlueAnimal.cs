@@ -2,11 +2,11 @@ using System.Collections;
 using UnityEngine;
 
 /// <summary>
-/// Blue animal mount: its attack is a melee <b>tail swipe</b> — a short reach in front
-/// (<see cref="Animal.HitInFront"/>: damages enemies, shatters rocks, spares bonfires). On screen it
-/// <b>whips in place</b> — a quick rotational lash toward the facing direction and back — so the
-/// swipe reads without the animal dashing out of position, and stays clearly different from the green
-/// animal's full spin. Collected via the heart pickup (ME-49).
+/// Blue animal mount: its attack is a melee <b>tail swipe</b> — a short reach in front of the animal,
+/// routed through the shared <see cref="Animal.ApplyHit"/> rule (damages enemies, shatters rocks,
+/// spares bonfires). On screen it <b>whips in place</b> — a quick rotational lash toward the facing
+/// direction and back — so the swipe reads without the animal dashing out of position, and stays
+/// clearly different from the green animal's full spin. Collected via the heart pickup (ME-49).
 /// </summary>
 public class BlueAnimal : Animal
 {
@@ -16,7 +16,10 @@ public class BlueAnimal : Animal
 
     protected override void PerformAttack(Vector2 direction)
     {
-        HitInFront(direction);
+        // This animal's own strike shape: a short circle just in front, in the facing direction.
+        Vector2 dir = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
+        Vector2 center = (Vector2)transform.position + dir * (attackReach * 0.5f);
+        ApplyHit(center, attackReach * 0.5f);
     }
 
     // A quick rotational lash toward the facing direction and back — a tail swipe, not a forward

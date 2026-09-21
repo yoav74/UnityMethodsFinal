@@ -10,7 +10,6 @@ using UnityEngine;
 public class ThrowWeapon : MonoBehaviour, IWeapon
 {
     [SerializeField] private string displayName = "Weapon";
-    [SerializeField] private Sprite icon;
     [Header("Projectile")]
     [SerializeField] private GameObject projectilePrefab;
     [SerializeField] private float projectileSpeed = 10f;
@@ -22,7 +21,6 @@ public class ThrowWeapon : MonoBehaviour, IWeapon
     private ProjectilePool _pool;
 
     public string DisplayName => displayName;
-    public Sprite Icon => icon;
 
     private void Awake()
     {

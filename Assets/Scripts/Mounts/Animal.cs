@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Base rideable animal. It owns the <b>shared attack rules</b> (ME-50) as reusable helpers —
-/// <see cref="HitInFront"/>, <see cref="HitAround"/> — that damage enemies (via
-/// <see cref="IDamageable"/>, so the ghost shrugs them off) and shatter rocks (via
-/// <see cref="IDestructible"/>) but never bonfires (those are <see cref="IFairyDestructible"/>).
+/// Base rideable animal. It owns the <b>shared attack rule</b> (ME-50) in one place —
+/// <see cref="ApplyHit"/> — which damages enemies (via <see cref="IDamageable"/>, so the ghost
+/// shrugs them off) and shatters rocks (via <see cref="IDestructible"/>) but never bonfires (those
+/// are <see cref="IFairyDestructible"/>). Each concrete animal computes its <b>own strike shape</b>
+/// (a front reach, a spin, a projectile) and routes it through that rule.
 ///
 /// <see cref="Attack"/> is a <b>Template Method</b>: the base fixes the invariant part — always play
 /// the attack feedback — and defers the variable part to <see cref="PerformAttack"/>, which each
@@ -19,8 +20,6 @@ using UnityEngine;
 /// </summary>
 public abstract class Animal : MonoBehaviour, IMount
 {
-    [SerializeField] private string displayName = "Animal";
-    [SerializeField] private Sprite icon;
     [SerializeField] protected float attackReach = 1.5f;
 
     [Header("Ride visuals")]
@@ -44,9 +43,6 @@ public abstract class Animal : MonoBehaviour, IMount
     private Vector3 _basePos;
     private Quaternion _baseRot = Quaternion.identity;
     private Coroutine _feedback;
-
-    public string DisplayName => displayName;
-    public Sprite Icon => icon;
 
     protected float FeedbackSeconds => attackFeedbackSeconds;
 
@@ -104,23 +100,13 @@ public abstract class Animal : MonoBehaviour, IMount
     /// <summary>Each animal's own attack, built from the shared hit helpers below.</summary>
     protected abstract void PerformAttack(Vector2 direction);
 
-    /// <summary>The shared melee reach in the facing direction (a tail swipe).</summary>
-    protected void HitInFront(Vector2 direction)
-    {
-        Vector2 dir = direction.sqrMagnitude > 0f ? direction.normalized : Vector2.right;
-        Vector2 center = (Vector2)transform.position + dir * (attackReach * 0.5f);
-        HitCircle(center, attackReach * 0.5f);
-    }
-
-    /// <summary>A hit in a full circle around the animal (a spin attack).</summary>
-    protected void HitAround(float radius)
-    {
-        HitCircle(transform.position, radius);
-    }
-
-    // The shared rules applied to everything overlapping a circle: damage enemies (ghost immune),
-    // shatter rocks — never bonfires.
-    private void HitCircle(Vector2 center, float radius)
+    /// <summary>
+    /// The shared animal-attack rule: everything overlapping the circle takes a hit — damage enemies
+    /// (the ghost is immune, being non-<see cref="IDamageable"/>) and shatter rocks
+    /// (<see cref="IDestructible"/>), never bonfires. Each animal computes its own strike shape (a
+    /// front reach, a spin) and routes it through here, so "what a hit does" lives in one place.
+    /// </summary>
+    protected void ApplyHit(Vector2 center, float radius)
     {
         Physics2D.OverlapCircle(center, radius, TriggerFilter, _hits);
         foreach (var hit in _hits)
